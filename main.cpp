@@ -2,19 +2,34 @@
 
 int main()
 {
-    std::cout << "Players (2 to 9)" << std::endl;
-
     int nbPlayers;
-    std::cin >> nbPlayers;
-
     int ARRAY_SIZE;
-    if (nbPlayers >= 2 && nbPlayers <= 5)
+
+    while (true)
     {
-        ARRAY_SIZE = 20;
-    }
-    else if (nbPlayers >= 6 && nbPlayers <= 9)
-    {
-        ARRAY_SIZE = 30;
+        std::cout << "Players (2 to 9): ";
+        std::cin >> nbPlayers;
+
+        switch (nbPlayers)
+        {
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            ARRAY_SIZE = 20;
+            break;
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            ARRAY_SIZE = 30;
+            break;
+        default:
+            std::cout << "Invalid input. Please enter an integer between 2 and 9." << std::endl;
+            continue;
+        }
+
+        break;
     }
 
     char array[ARRAY_SIZE][ARRAY_SIZE];
@@ -34,5 +49,6 @@ int main()
         }
         std::cout << std::endl;
     }
+
     return 0;
 }
