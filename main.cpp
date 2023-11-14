@@ -1,4 +1,21 @@
 #include <iostream>
+#include <vector>
+#include <string>
+
+// Fonction pour afficher les choix de couleurs
+void displayColorChoices()
+{
+    std::cout << "Color Choices:" << std::endl;
+    std::cout << "1. Red" << std::endl;
+    std::cout << "2. Green" << std::endl;
+    std::cout << "3. Blue" << std::endl;
+    std::cout << "4. Yellow" << std::endl;
+    std::cout << "5. Magenta" << std::endl;
+    std::cout << "6. Cyan" << std::endl;
+    std::cout << "7. White" << std::endl;
+    std::cout << "8. Black" << std::endl;
+    std::cout << "9. Orange" << std::endl;
+}
 
 int main()
 {
@@ -32,6 +49,63 @@ int main()
         break;
     }
 
+    // Demander aux joueurs leur nom et couleur
+    std::vector<std::string> playerNames;
+    std::vector<std::string> playerColors;
+
+    for (int i = 0; i < nbPlayers; ++i)
+    {
+        std::string playerName;
+        std::cout << "Enter name for Player " << i + 1 << ": ";
+        std::cin >> playerName;
+        playerNames.push_back(playerName);
+
+        displayColorChoices();
+        int colorChoice;
+        std::cout << "Select color for " << playerName << " (1 to 9): ";
+        std::cin >> colorChoice;
+
+        // Associer le choix de couleur à une couleur réelle
+        std::string color;
+        switch (colorChoice)
+        {
+        case 1:
+            color = "Red";
+            break;
+        case 2:
+            color = "Green";
+            break;
+        case 3:
+            color = "Blue";
+            break;
+        case 4:
+            color = "Yellow";
+            break;
+        case 5:
+            color = "Magenta";
+            break;
+        case 6:
+            color = "Cyan";
+            break;
+        case 7:
+            color = "White";
+            break;
+        case 8:
+            color = "Black";
+            break;
+        case 9:
+            color = "Orange";
+            break;
+        default:
+            std::cout << "Invalid color choice. Defaulting to Black." << std::endl;
+            color = "Black";
+            break;
+        }
+
+        playerColors.push_back(color);
+    }
+
+    // Initialiser et afficher le tableau
     char array[ARRAY_SIZE][ARRAY_SIZE];
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
@@ -41,6 +115,13 @@ int main()
         }
     }
 
+    // Afficher les noms et couleurs des joueurs
+    for (int i = 0; i < nbPlayers; ++i)
+    {
+        std::cout << "Player " << i + 1 << ": " << playerNames[i] << " (Color: " << playerColors[i] << ")" << std::endl;
+    }
+
+    // Afficher le tableau
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
         for (int j = 0; j < ARRAY_SIZE; j++)
