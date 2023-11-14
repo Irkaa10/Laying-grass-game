@@ -1,48 +1,31 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <set> // Ajout de la bibliothèque set pour gérer les couleurs déjà choisies
+#include <set>
 
-// Fonction pour afficher les choix de couleurs
-void displayColorChoices()
-{
-    std::cout << "Color Choices:" << std::endl;
-    std::cout << "1. Red" << std::endl;
-    std::cout << "2. Green" << std::endl;
-    std::cout << "3. Blue" << std::endl;
-    std::cout << "4. Yellow" << std::endl;
-    std::cout << "5. Magenta" << std::endl;
-    std::cout << "6. Cyan" << std::endl;
-    std::cout << "7. White" << std::endl;
-    std::cout << "8. Black" << std::endl;
-    std::cout << "9. Orange" << std::endl;
-}
+#include "utils/displayColorChoices.hpp"
 
 int main()
 {
     int nbPlayers;
     int ARRAY_SIZE;
 
+    // AJOUTER VÉRIF SI INPUT = INT
     while (true)
     {
         std::cout << "Players (2 to 9): ";
         std::cin >> nbPlayers;
 
-        switch (nbPlayers)
+        if (nbPlayers >= 2 && nbPlayers <= 5)
         {
-        case 2:
-        case 3:
-        case 4:
-        case 5:
             ARRAY_SIZE = 20;
-            break;
-        case 6:
-        case 7:
-        case 8:
-        case 9:
+        }
+        else if (nbPlayers >= 6 && nbPlayers <= 9)
+        {
             ARRAY_SIZE = 30;
-            break;
-        default:
+        }
+        else
+        {
             std::cout << "Invalid input. Please enter an integer between 2 and 9." << std::endl;
             continue;
         }
@@ -124,7 +107,7 @@ int main()
         }
     }
 
-    // Initialiser et afficher le tableau
+    // Initialiser le tableau
     char array[ARRAY_SIZE][ARRAY_SIZE];
     for (int i = 0; i < ARRAY_SIZE; i++)
     {
