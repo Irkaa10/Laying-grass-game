@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <set> // Ajout de la bibliothèque set pour gérer les couleurs déjà choisies
 
 // Fonction pour afficher les choix de couleurs
 void displayColorChoices()
@@ -53,6 +54,9 @@ int main()
     std::vector<std::string> playerNames;
     std::vector<std::string> playerColors;
 
+    // Utiliser un ensemble (set) pour suivre les couleurs déjà choisies
+    std::set<int> chosenColors;
+
     for (int i = 0; i < nbPlayers; ++i)
     {
         std::string playerName;
@@ -60,49 +64,64 @@ int main()
         std::cin >> playerName;
         playerNames.push_back(playerName);
 
-        displayColorChoices();
-        int colorChoice;
-        std::cout << "Select color for " << playerName << " (1 to 9): ";
-        std::cin >> colorChoice;
-
-        // Associer le choix de couleur à une couleur réelle
-        std::string color;
-        switch (colorChoice)
+        while (true)
         {
-        case 1:
-            color = "Red";
-            break;
-        case 2:
-            color = "Green";
-            break;
-        case 3:
-            color = "Blue";
-            break;
-        case 4:
-            color = "Yellow";
-            break;
-        case 5:
-            color = "Magenta";
-            break;
-        case 6:
-            color = "Cyan";
-            break;
-        case 7:
-            color = "White";
-            break;
-        case 8:
-            color = "Black";
-            break;
-        case 9:
-            color = "Orange";
-            break;
-        default:
-            std::cout << "Invalid color choice. Defaulting to Black." << std::endl;
-            color = "Black";
-            break;
-        }
+            displayColorChoices();
+            int colorChoice;
+            std::cout << "Select color for " << playerName << " (1 to 9): ";
+            std::cin >> colorChoice;
 
-        playerColors.push_back(color);
+            // Vérifier si la couleur est déjà choisie
+            if (chosenColors.find(colorChoice) != chosenColors.end())
+            {
+                std::cout << "Color already chosen. Please choose a different color." << std::endl;
+            }
+            else
+            {
+                // Ajouter la couleur choisie à l'ensemble
+                chosenColors.insert(colorChoice);
+
+                // Associer le choix de couleur à une couleur réelle
+                std::string color;
+                switch (colorChoice)
+                {
+                case 1:
+                    color = "Red";
+                    break;
+                case 2:
+                    color = "Green";
+                    break;
+                case 3:
+                    color = "Blue";
+                    break;
+                case 4:
+                    color = "Yellow";
+                    break;
+                case 5:
+                    color = "Magenta";
+                    break;
+                case 6:
+                    color = "Cyan";
+                    break;
+                case 7:
+                    color = "White";
+                    break;
+                case 8:
+                    color = "Black";
+                    break;
+                case 9:
+                    color = "Orange";
+                    break;
+                default:
+                    std::cout << "Invalid color choice. Defaulting to Black." << std::endl;
+                    color = "Black";
+                    break;
+                }
+
+                playerColors.push_back(color);
+                break;
+            }
+        }
     }
 
     // Initialiser et afficher le tableau
