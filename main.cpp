@@ -110,18 +110,14 @@ int main()
         }
     }
 
-    // Initialiser le tableau
-    Board newBoard(ARRAY_SIZE);
-    newBoard.initializeBoard();
-
-
     // Afficher les noms et couleurs des joueurs
     for (int i = 0; i < nbPlayers; ++i)
     {
         std::cout << "Player " << i + 1 << ": " << playerNames[i] << " (Color: " << playerColors[i] << ")" << std::endl;
     }
 
-    // Afficher le tableau
+    // Initialiser et afficher le tableau
+    Board newBoard(ARRAY_SIZE);
     newBoard.displayBoard();
 
 
