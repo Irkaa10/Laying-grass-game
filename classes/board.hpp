@@ -17,7 +17,7 @@ public:
 // constructor
 Board::Board(int size) : boardSize(size), board(size, std::vector<char>(size, '.')) {}
 
-// Destructor
+// Default destructor
 Board::~Board() = default;
 
 void Board::displayBoard()
