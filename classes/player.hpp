@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <vector>
 
 class Player
 {
@@ -10,19 +10,14 @@ private:
 public:
     // Constructeur prenant le nom et la couleur en paramètres
     Player(const std::string &playerName, const int playerColor);
-
-    // Méthode pour poser une pièce sur le plateau
-    void placePieceOnBoard();
+    // Méthode pour afficher les informations du joueur
+    void displayInfo() const;
 };
 
 // Implémentation du constructeur
-Player::Player(const std::string &playerName, const int playerColor) : name(playerName), color(playerColor)
-{
-}
+Player::Player(const std::string &playerName, const int playerColor) : name(playerName), color(playerColor) {}
 
-// Implémentation de la méthode pour poser une pièce sur le plateau
-void Player::placePieceOnBoard()
+void Player::displayInfo() const
 {
-    // Logique pour poser une pièce sur le plateau
-    std::cout << name << " is placing a piece on the board." << std::endl;
+    std::cout << "Player " << name << " (Color: " << color << ")" << std::endl;
 }
