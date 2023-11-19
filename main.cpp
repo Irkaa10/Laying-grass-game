@@ -111,8 +111,8 @@ int main()
     }
 
     // Initialiser le tableau
-    Board myBoard(ARRAY_SIZE);
-    myBoard.initializeBoard();
+    Board newBoard(ARRAY_SIZE);
+    newBoard.initializeBoard();
 
 
     // Afficher les noms et couleurs des joueurs
@@ -122,7 +122,7 @@ int main()
     }
 
     // Afficher le tableau
-    myBoard.displayBoard();
+    newBoard.displayBoard();
 
 
     return 0;
