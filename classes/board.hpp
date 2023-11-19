@@ -1,60 +1,57 @@
 #include <iostream>
+#include <vector>
 
 class Board
 {
 private:
-    char **array;
-    int size;
+    int boardSize;
+    std::vector<std::vector<char> > board;
 
 public:
     Board(int size);
     ~Board();
-    void initializeBoard();
     void displayBoard();
-    void placeElement(int row, int col, char element);
+    void fillCell(int row, int col);
 };
 
-Board::Board(int size)
-{
-    // Initialiser la taille
-    this->size = size;
+// constructor
+Board::Board(int size) : boardSize(size), board(size, std::vector<char>(size, '.')) {}
 
-    // Allouer de la mémoire pour le tableau
-    array = new char *[size];
-    for (int i = 0; i < size; ++i)
-    {
-        array[i] = new char[size];
-    }
-}
-
-Board::~Board()
-{
-    for (int i = 0; i < size; ++i)
-    {
-        delete[] array[i];
-    }
-    delete[] array;
-}
-
-void Board::initializeBoard()
-{
-    for (int i = 1; i < size; i++)
-    {
-        for (int j = 1; j < size; j++)
-        {
-            array[i][j] = '.';
-        }
-    }
-}
+// Destructor
+Board::~Board() = default;
 
 void Board::displayBoard()
 {
-    for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < size; j++)
+        // Print column coordinates with letters
+        std::cout << "   ";
+        for (int i = 0; i < boardSize; ++i)
         {
-            std::cout << array[i][j] << ' ';
+            std::cout << char('A' + i) << " ";
         }
         std::cout << std::endl;
+
+        // Print rows with row coordinates, letters, and array elements
+        for (int i = 0; i < boardSize; ++i)
+        {
+            std::cout << char('A' + i) << "  ";
+            for (int j = 0; j < boardSize; ++j)
+            {
+                std::cout << board[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
+void Board::fillCell(int row, int col)
+{
+    if (row >= 0 && row < boardSize && col >= 0 && col < boardSize)
+    {
+        board[row][col] = 'X';
+    }
+    else
+    {
+        std::cout << "Invalid coordinates. Cell not filled." << std::endl;
     }
 }
