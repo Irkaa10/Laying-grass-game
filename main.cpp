@@ -3,13 +3,15 @@
 #include <string>
 #include <set>
 
-#include "utils/displayColorChoices.hpp"
+#include "helpers/displayColorChoices.hpp"
+#include "classes/board.hpp"
 
 int main()
 {
     int nbPlayers;
     int ARRAY_SIZE;
 
+    //Boucle pour demander le nombre de joueurs
     // AJOUTER VÉRIF SI INPUT = INT
     while (true)
     {
@@ -34,6 +36,7 @@ int main()
     }
 
     // Demander aux joueurs leur nom et couleur
+    // Utiliser des vecteurs pour stocker les noms et couleurs des joueurs
     std::vector<std::string> playerNames;
     std::vector<std::string> playerColors;
 
@@ -108,14 +111,9 @@ int main()
     }
 
     // Initialiser le tableau
-    char array[ARRAY_SIZE][ARRAY_SIZE];
-    for (int i = 0; i < ARRAY_SIZE; i++)
-    {
-        for (int j = 0; j < ARRAY_SIZE; j++)
-        {
-            array[i][j] = '.';
-        }
-    }
+    Board myBoard(ARRAY_SIZE);
+    myBoard.initializeBoard();
+
 
     // Afficher les noms et couleurs des joueurs
     for (int i = 0; i < nbPlayers; ++i)
@@ -124,14 +122,8 @@ int main()
     }
 
     // Afficher le tableau
-    for (int i = 0; i < ARRAY_SIZE; i++)
-    {
-        for (int j = 0; j < ARRAY_SIZE; j++)
-        {
-            std::cout << array[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
+    myBoard.displayBoard();
+
 
     return 0;
 }
