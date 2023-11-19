@@ -3,37 +3,50 @@
 class Board
 {
 private:
-    char **array; // Utilisation d'un double pointeur pour créer un tableau dynamique
-    int size;     // Ajout d'une variable pour stocker la taille du tableau
+    char **array;
+    int size;
 
 public:
-    Board(int size);        // Ajout d'un constructeur avec la taille du tableau comme argument
-    ~Board();               // Ajout d'un destructeur pour libérer la mémoire allouée dynamiquement
-    void initializeBoard(); // Ajout d'une fonction pour initialiser le tableau
-    void displayBoard();    // Ajout d'une fonction pour afficher le tableau
+    Board(int size);
+    ~Board();
+    void initializeBoard();
+    void displayBoard();
+    void placeElement(int row, int col, char element);
 };
 
-// Définition du constructeur
 Board::Board(int size)
 {
-    this->size = size;
-
-    // Allocation dynamique du tableau 2D
-    array = new char *[size];
-    for (int i = 0; i < size; ++i)
+    this->size = size + 1; // Augmentez la taille pour ajouter une ligne et une colonne pour les nombres
+    array = new char *[this->size];
+    for (int i = 0; i < this->size; ++i)
     {
-        array[i] = new char[size];
-        for (int j = 0; j < size; ++j)
+        array[i] = new char[this->size];
+        for (int j = 0; j < this->size; ++j)
         {
-            array[i][j] = '.';
+            if (i == 0) // Première ligne pour les nombres de colonnes
+            {
+                array[i][j] = j == 0 ? ' ' : char('0' + j);
+            }
+            else if (j == 0) // Première colonne pour les nombres de lignes
+            {
+                array[i][j] = char('0' + i);
+            }
+            else
+            {
+                array[i][j] = '.';
+            }
+
+            if (array[i][j] > '9')
+            {
+                // Si la valeur est supérieure à '9', remplacez-la par un entier
+                array[i][j] = char('0' + i);
+            }
         }
     }
 }
 
-// Définition du destructeur
 Board::~Board()
 {
-    // Libération de la mémoire allouée dynamiquement
     for (int i = 0; i < size; ++i)
     {
         delete[] array[i];
@@ -41,20 +54,17 @@ Board::~Board()
     delete[] array;
 }
 
-// Définition de la fonction initializeBoard
 void Board::initializeBoard()
 {
-    // Vous pouvez réinitialiser le tableau ici si nécessaire
-    for (int i = 0; i < size; i++)
+    for (int i = 1; i < size; i++)
     {
-        for (int j = 0; j < size; j++)
+        for (int j = 1; j < size; j++)
         {
             array[i][j] = '.';
         }
     }
 }
 
-// Définition de la fonction displayBoard
 void Board::displayBoard()
 {
     for (int i = 0; i < size; i++)
