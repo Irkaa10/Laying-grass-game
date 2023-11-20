@@ -10,7 +10,8 @@ private:
 public:
     Board(int size);
     ~Board();
-    void displayBoard();
+    void initBoard();
+    void displayBoard() const;
     void fillCell(int row, int col);
 };
 
@@ -20,7 +21,7 @@ Board::Board(int size) : boardSize(size), board(size, std::vector<char>(size, '.
 // Default destructor
 Board::~Board() = default;
 
-void Board::displayBoard()
+void Board::displayBoard() const
 {
     {
         // Print column coordinates with letters
