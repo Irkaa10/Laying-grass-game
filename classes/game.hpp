@@ -4,6 +4,7 @@
 #include <set>
 #include <algorithm>
 #include <random>
+#include <limits>
 
 #include "board.hpp"
 #include "player.hpp"
@@ -13,7 +14,7 @@
 class Game
 {
 private:
-    // Add array size
+    //Add array size
     int numPlayers;
     int numRounds = 9;
     std::vector<std::string> players;
@@ -29,14 +30,14 @@ public:
     void run(); // Run the game
 };
 
-void Game::run() // Handle the game logic
+void Game::run() //Handle the game logic
 {
     int ARRAY_SIZE;
     numPlayers = getNumberOfPlayers(ARRAY_SIZE);
 
     initializePlayers();
 
-    // Ransomize the order of players
+    //Ransomize the order of players
     shufflePlayerOrder();
 
     Board newBoard(ARRAY_SIZE);
