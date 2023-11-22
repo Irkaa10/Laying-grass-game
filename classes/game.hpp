@@ -13,6 +13,7 @@
 class Game
 {
 private:
+    // Add array size
     int numPlayers;
     int numRounds = 9;
     std::vector<std::string> players;
@@ -28,13 +29,20 @@ public:
     void run(); // Run the game
 };
 
-void Game::run()
+void Game::run() // Handle the game logic
 {
     int ARRAY_SIZE;
     numPlayers = getNumberOfPlayers(ARRAY_SIZE);
+
     initializePlayers();
+
+    // Ransomize the order of players
     shufflePlayerOrder();
+
     Board newBoard(ARRAY_SIZE);
+    TilesManager newTilesManager;
+
+    newTilesManager.readTilesFromFile("game_tiles.txt");
 
     for (int round = 1; round <= numRounds; ++round)
     {
@@ -49,6 +57,8 @@ void Game::run()
 
             // Perform some game logic
             newBoard.displayBoard();
+            newTilesManager.displayCurrentTile();
+            newTilesManager.displayQueue();
 
             // Let the user choose which cell to fill
             char userInput;
@@ -58,11 +68,9 @@ void Game::run()
             std::cin >> userInput >> fillRow;
             fillCol = static_cast<int>(userInput) - 'A'; // Convert letter to column index
 
-            // Example of filling a cell with 'X' at user-specified coordinates
-            newBoard.fillCell(fillRow - 1, fillCol);
-
-            // Print the updated board
-            newBoard.displayBoard();
+            // Example of filling a cell with '#' at user-specified coordinates
+            newBoard.fillCell(fillRow - 1, fillCol, newTilesManager);
+            newTilesManager.deleteLastTile();
         }
     }
 }
