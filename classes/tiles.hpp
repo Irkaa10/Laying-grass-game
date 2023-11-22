@@ -22,15 +22,22 @@ private:
 public:
     // TilesManager(const std::string &filename);   // Constructor to read the tiles from a file
     std::vector<Tile> readTilesFromFile(const std::string &filename); // Function to return the vector of tiles
+    std::vector<Tile> getTiles();                                     // Function to return the last vector of tiles
     void displayTile(const Tile &tile);                               // Function to display the tiles
+    void displayCurrentTile();                                        // Function to display the current tile
     void handleRotation(Tile &tile);                                  // Function to rotate the tiles
     void displayQueue();                                              // Function to display the next 5 tiles
 };
 
+// Add handler for empty vector
+std::vector<Tile> TilesManager::getTiles()
+{
+    return tiles;
+}
+
 // Function to read tiles from a file and store them in a vector of Tile objects
 std::vector<Tile> TilesManager::readTilesFromFile(const std::string &filename)
 {
-    std::vector<Tile> tiles;      // Vector to store the tiles read from the file
     std::ifstream file(filename); // Open the file
 
     if (file.is_open()) // Check if the file is open
@@ -77,15 +84,20 @@ void TilesManager::handleRotation(Tile &tile) // Pass by reference to modify the
     }
 }
 
+// Function to display the current tile
+void TilesManager::displayCurrentTile()
+{
+}
+
 // Function to display the next 5 tiles in the queue (The last 5 tiles in the vector)
 void TilesManager::displayQueue()
 {
     int startIdx = std::max(0, static_cast<int>(tiles.size()) - 5); // Start index for the last 5 tiles
 
     std::cout << "Next tiles:" << std::endl;
-    for (int i = startIdx; i < tiles.size(); ++i) // Loop through the last 5 tiles in the vector of tiles
+    for (int i = startIdx; i < tiles.size(); ++i)
     {
-        displayTile(tiles[i]); // Display the tile
+        displayTile(tiles[i]);
     }
 }
 
@@ -103,7 +115,7 @@ void TilesManager::displayTile(const Tile &tile)
     }
 
     // Create an empty grid to display the tile
-    std::vector<std::vector<char>> grid(maxY - minY + 1, std::vector<char>(maxX - minX + 1, ' '));
+    std::vector<std::vector<char> > grid(maxY - minY + 1, std::vector<char>(maxX - minX + 1, ' '));
 
     // Mark the tile coordinates on the grid
     for (const auto &coord : tile.coordinates)
