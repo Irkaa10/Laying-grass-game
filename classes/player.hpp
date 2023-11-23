@@ -1,23 +1,47 @@
 #include <iostream>
 #include <vector>
 
+enum Color {
+    Red = 1,
+    Green,
+    Blue,
+    Yellow,
+    Magenta,
+    Cyan,
+    White,
+    Black,
+    Orange
+};
+
 class Player
 {
 private:
     std::string name;
-    int color;
+    Color color;
     std::vector<std::pair<int, int> > territory;
 
 public:
     // Constructeur prenant le nom et la couleur en paramètres
-    Player(const std::string &playerName, const int playerColor);
+    Player(const std::string &playerName, const Color playerColor);
     // Méthode pour afficher les informations du joueur
     void displayInfo() const;
+    std::string getName() const;
+    Color getColor() const; // Getter for the color
     void addTerritory(int x, int y, int boardsSize);
 };
 
 // Implémentation du constructeur
-Player::Player(const std::string &playerName, const int playerColor) : name(playerName), color(playerColor) {}
+Player::Player(const std::string &playerName, const Color playerColor) : name(playerName), color(playerColor) {}
+
+std::string Player::getName() const
+{
+    return name;
+}
+
+Color Player::getColor() const
+{
+    return color;
+}
 
 void Player::displayInfo() const
 {
