@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 
-enum Color {
+enum Color
+{
     Red = 1,
     Green,
     Blue,
@@ -18,7 +19,7 @@ class Player
 private:
     std::string name;
     Color color;
-    std::vector<std::pair<int, int> > territory;
+    std::vector<std::pair<int, int>> territory;
 
 public:
     // Constructeur prenant le nom et la couleur en paramètres
@@ -28,6 +29,7 @@ public:
     std::string getName() const;
     Color getColor() const; // Getter for the color
     void addTerritory(int x, int y, int boardsSize);
+    std::vector<std::pair<int, int>> getTerritory() const;
 };
 
 // Implémentation du constructeur
@@ -46,6 +48,11 @@ Color Player::getColor() const
 void Player::displayInfo() const
 {
     std::cout << "Player " << name << " (Color: " << color << ")" << std::endl;
+}
+
+std::vector<std::pair<int, int>> Player::getTerritory() const
+{
+    return territory;
 }
 
 void Player::addTerritory(int x, int y, int boardSize)
