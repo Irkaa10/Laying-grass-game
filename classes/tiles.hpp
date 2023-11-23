@@ -27,6 +27,7 @@ public:
     void displayCurrentTile();                                        // Function to display the current tile
     void handleRotation(Tile &tile);                                  // Function to rotate the tiles
     void displayQueue();                                              // Function to display the next 5 tiles
+    void deleteLastTile();                                            // Function to delete the last tile
 };
 
 // Add handler for empty vector
@@ -87,15 +88,24 @@ void TilesManager::handleRotation(Tile &tile) // Pass by reference to modify the
 // Function to display the current tile
 void TilesManager::displayCurrentTile()
 {
+    if (!tiles.empty())
+    {
+        std::cout << "\nCurrent Tile:" << std::endl;
+        displayTile(tiles.back()); // Display the last tile in the vector
+    }
+    else
+    {
+        std::cout << "No tiles to display." << std::endl;
+    }
 }
 
 // Function to display the next 5 tiles in the queue (The last 5 tiles in the vector)
 void TilesManager::displayQueue()
 {
-    int startIdx = std::max(0, static_cast<int>(tiles.size()) - 5); // Start index for the last 5 tiles
+    int startIdx = std::max(0, static_cast<int>(tiles.size()) - 6); // Start index for the last 5 tiles (including the soon-to-be-ejected tile)
 
-    std::cout << "Next tiles:" << std::endl;
-    for (int i = startIdx; i < tiles.size(); ++i)
+    std::cout << "\nNext tiles:" << std::endl;
+    for (int i = startIdx; i < tiles.size() - 1; ++i) // Exclude the soon-to-be-ejected tile
     {
         displayTile(tiles[i]);
     }
@@ -134,4 +144,18 @@ void TilesManager::displayTile(const Tile &tile)
     }
 
     std::cout << std::endl;
+}
+
+// Function to delete the last tile from the vector 'tiles'
+void TilesManager::deleteLastTile()
+{
+    if (!tiles.empty()) // Check if the vector is not empty
+    {
+        tiles.pop_back(); // Remove the last tile from the vector
+        std::cout << "Last tile deleted." << std::endl;
+    }
+    else
+    {
+        std::cout << "No tiles to delete." << std::endl;
+    }
 }
