@@ -1,5 +1,6 @@
 #include <iostream>
 #include "tiles.hpp"
+#include "player.hpp"
 
 class Board
 {
@@ -12,7 +13,7 @@ public:
     ~Board();
     void initBoard();
     void displayBoard() const;
-    void fillCell(int row, int col, TilesManager &tilesManager);
+    void fillCell(int row, int col, TilesManager &tilesManager, Player &player);
 };
 
 // constructor to initialize the board size and allocate memory for the 2D array
@@ -73,8 +74,7 @@ void Board::displayBoard() const
     }
 }
 
-// Function to fill a cell with 'X' at the specified coordinates (int row, int col).
-void Board::fillCell(int row, int col, TilesManager &tilesManager)
+void Board::fillCell(int row, int col, TilesManager &tilesManager, Player &player)
 {
     // Get the last tile from the TilesManager
     std::vector<Tile> tiles = tilesManager.getTiles();
@@ -105,5 +105,11 @@ void Board::fillCell(int row, int col, TilesManager &tilesManager)
         int newRow = row + coord.y;
         int newCol = col + coord.x;
         board[newRow][newCol] = '#';
+
+        // Add the filled cell to the player's territory
+        player.addTerritory(newRow, newCol);
+
+        // Print the coordinates of the filled cell
+        std::cout << "Filled cell at row " << newRow << ", column " << newCol << std::endl;
     }
 }
