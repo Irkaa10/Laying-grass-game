@@ -1,4 +1,5 @@
 #include <iostream>
+#include "tiles.hpp"
 
 class Board
 {
@@ -11,7 +12,7 @@ public:
     ~Board();
     void initBoard();
     void displayBoard() const;
-    void fillCell(int row, int col);
+    void fillCell(int row, int col, TilesManager &tilesManager);
 };
 
 // constructor to initialize the board size and allocate memory for the 2D array
@@ -73,14 +74,36 @@ void Board::displayBoard() const
 }
 
 // Function to fill a cell with 'X' at the specified coordinates (int row, int col).
-void Board::fillCell(int row, int col)
+void Board::fillCell(int row, int col, TilesManager &tilesManager)
 {
-    if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) // Check if coordinates are valid (within the board)
+    // Get the last tile from the TilesManager
+    std::vector<Tile> tiles = tilesManager.getTiles();
+    if (tiles.empty())
     {
-        board[row][col] = 'X';
+        std::cout << "No tiles available to place on the board." << std::endl;
+        return;
     }
-    else
+
+    const Tile &tile = tiles.back(); // Get the last tile from the vector
+
+    // Check if any part of the tile is outside the board
+    for (const auto &coord : tile.coordinates)
     {
-        std::cout << "Invalid coordinates. Cell not filled." << std::endl;
+        int newRow = row + coord.y;
+        int newCol = col + coord.x;
+
+        if (newRow < 0 || newRow >= boardSize || newCol < 0 || newCol >= boardSize)
+        {
+            std::cout << "Invalid tile placement, part of the tile is outside the board." << std::endl;
+            return; // Exit the function if any part of the tile is outside the board
+        }
+    }
+
+    // If all coordinates are within the board boundaries, place the tile on the board
+    for (const auto &coord : tile.coordinates)
+    {
+        int newRow = row + coord.y;
+        int newCol = col + coord.x;
+        board[newRow][newCol] = '#';
     }
 }
