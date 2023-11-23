@@ -8,21 +8,18 @@
 
 #include "board.hpp"
 #include "player.hpp"
-#include "../helpers/displayColorChoices.hpp"
-#include "../helpers/getColorName.hpp"
 
 class Game
 {
 private:
-    //Add array size
-    int numPlayers;
     int numRounds = 9;
-    std::vector<std::string> players;
+    int ARRAY_SIZE;
+    int numPlayers;
+    std::vector<Player> players;           // Now using vector of Player objects instead of strings
+    std::vector<std::string> playerColors; // Vector to store the colors of the players
     std::vector<std::string> playerOrder;
-
-    int getNumberOfPlayers(int &ARRAY_SIZE);
-    void getPlayerInfo(std::vector<std::string> &playerNames, std::vector<std::string> &playerColors);
-    void displayPlayerInfo(const std::vector<std::string> &playerNames, const std::vector<std::string> &playerColors);
+    void displayPlayerInfo() const;
+    void displayAvailableColors() const;
     void initializePlayers();
     void shufflePlayerOrder();
 
@@ -30,14 +27,14 @@ public:
     void run(); // Run the game
 };
 
-void Game::run() //Handle the game logic
+void Game::run() // Handle the game logic
 {
-    int ARRAY_SIZE;
-    numPlayers = getNumberOfPlayers(ARRAY_SIZE);
-
     initializePlayers();
+    displayPlayerInfo();
+    // int ARRAY_SIZE;
+    // numPlayers = getNumberOfPlayers(ARRAY_SIZE);
 
-    //Ransomize the order of players
+    // Ransomize the order of players
     shufflePlayerOrder();
 
     Board newBoard(ARRAY_SIZE);
@@ -76,87 +73,113 @@ void Game::run() //Handle the game logic
     }
 }
 
-int Game::getNumberOfPlayers(int &ARRAY_SIZE)
+void Game::displayPlayerInfo() const
 {
-    int nbPlayers;
-    while (true)
+    for (const auto &player : players)
     {
-        std::cout << "Players (2 to 9): ";
-        std::cin >> nbPlayers;
-
-        if (nbPlayers >= 2 && nbPlayers <= 5)
-        {
-            ARRAY_SIZE = 20;
-        }
-        else if (nbPlayers >= 6 && nbPlayers <= 9)
-        {
-            ARRAY_SIZE = 30;
-        }
-        else
-        {
-            std::cout << "Invalid input. Please enter an integer between 2 and 9." << std::endl;
-            continue;
-        }
-
-        break;
-    }
-
-    return nbPlayers;
-}
-
-void Game::getPlayerInfo(std::vector<std::string> &playerNames, std::vector<std::string> &playerColors)
-{
-    std::set<int> chosenColors;
-
-    for (int i = 0; i < numPlayers; ++i)
-    {
-        std::string playerName;
-        std::cout << "Enter name for Player " << i + 1 << ": ";
-        std::cin >> playerName;
-        playerNames.push_back(playerName);
-
-        while (true)
-        {
-            displayColorChoices();
-            int colorChoice;
-            std::cout << "Select color for " << playerName << " (1 to 9): ";
-            std::cin >> colorChoice;
-
-            if (chosenColors.find(colorChoice) != chosenColors.end())
-            {
-                std::cout << "Color already chosen. Please choose a different color." << std::endl;
-            }
-            else
-            {
-                chosenColors.insert(colorChoice);
-                playerColors.push_back(getColorName(colorChoice));
-                break;
-            }
-        }
+        player.displayInfo();
     }
 }
 
-void Game::displayPlayerInfo(const std::vector<std::string> &playerNames, const std::vector<std::string> &playerColors)
+void Game::displayAvailableColors() const
 {
-    for (int i = 0; i < numPlayers; ++i)
+    std::cout << "Available Colors:" << std::endl;
+    for (int i = 1; i <= 9; ++i)
     {
-        std::cout << "Player " << i + 1 << ": " << playerNames[i] << " (Color: " << playerColors[i] << ")" << std::endl;
+        std::cout << i << " - " << playerColors[i - 1] << std::endl;
     }
 }
 
 void Game::initializePlayers()
 {
-    std::vector<std::string> playerNames;
-    std::vector<std::string> playerColors;
+    do
+    {
+        std::cout << "Enter the number of players (between 2 and 9): ";
+        std::cin >> numPlayers;
 
-    getPlayerInfo(playerNames, playerColors);
-    displayPlayerInfo(playerNames, playerColors);
+        if (std::cin.fail() || numPlayers < 2 || numPlayers > 9)
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "\nInvalid input. Please enter a valid integer between 2 and 9." << std::endl;
+        }
+        else
+        {
+            break;
+        }
+    } while (true);
 
-    playerOrder = playerNames;
+    if (numPlayers >= 2 && numPlayers <= 4)
+    {
+        ARRAY_SIZE = 20;
+    }
+    else if (numPlayers >= 5 && numPlayers <= 9)
+    {
+        ARRAY_SIZE = 30;
+    }
+
+    playerColors = {"Red", "Green", "Blue", "Yellow", "Magenta", "Cyan", "White", "Black", "Orange"};
+
+    displayAvailableColors(); // Show available colors
+
+    for (int i = 0; i < numPlayers; ++i)
+    {
+        std::string playerName;
+        int colorChoice;
+
+        std::cout << "Enter the name for Player " << (i + 1) << ": ";
+        std::cin >> playerName;
+
+        do
+        {
+            std::cout << "Choose color for Player " << (i + 1) << " (1-9): ";
+            std::cin >> colorChoice;
+
+            if (std::cin.fail() || colorChoice < 1 || colorChoice > 9)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid color choice. Please enter an integer between 1 and 9." << std::endl;
+            }
+            else
+            {
+                // Check if the color is already chosen by another player
+                bool colorTaken = false;
+                for (const auto &player : players)
+                {
+                    if (player.getColor() == static_cast<Color>(colorChoice))
+                    {
+                        colorTaken = true;
+                        break;
+                    }
+                }
+
+                if (!colorTaken)
+                {
+                    break; // Exit the loop if the color choice is valid and not taken
+                }
+                else
+                {
+                    std::cout << "Color already chosen by another player. Choose a different color." << std::endl;
+                }
+            }
+
+        } while (true);
+
+        Color playerColor = static_cast<Color>(colorChoice);
+        Player player(playerName, playerColor);
+        players.push_back(player);
+    }
 }
 
 void Game::shufflePlayerOrder()
 {
+    // Populate playerOrder with player names before shuffling
+    for (const auto &player : players)
+    {
+        playerOrder.push_back(player.getName());
+    }
+
     // Use a random number generator to shuffle the order of players
     std::random_device rd;
     std::mt19937 g(rd());
