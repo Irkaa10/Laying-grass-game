@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <random>
 #include <limits>
+#include <cstdlib> // for system()
 
 #include "board.hpp"
 #include "player.hpp"
@@ -20,6 +21,7 @@ private:
     std::vector<std::string> playerOrder;
     void displayPlayerInfo() const;
     void displayAvailableColors() const;
+    void displayTerritory() const;
     void initializePlayers();
     void shufflePlayerOrder();
 
@@ -46,12 +48,35 @@ void Game::run() // Handle the game logic
     {
         std::cout << "\nRound " << round << ":\n";
 
-        for (auto playerIt = playerOrder.begin(); playerIt != playerOrder.end(); ++playerIt)
+        for (const std::string &playerName : playerOrder)
         {
-            const std::string &player = *playerIt;
+            auto playerIt = std::find_if(players.begin(), players.end(), [&](const Player &player)
+                                         { return player.getName() == playerName; });
+
+            if (playerIt == players.end())
+            {
+                // Handle error, player not found
+                continue;
+            }
+
+            Player &currentPlayer = *playerIt;
 
             // Ask the player to enter a letter
-            std::cout << player << "'s turn: \n";
+            std::cout << currentPlayer.getName() << "'s turn: \n";
+
+            // Display player's territory
+            std::cout << "Territory Content:" << std::endl;
+
+            // Get the territory vector from the player
+            std::vector<std::pair<int, int>> playerTerritory = currentPlayer.getTerritory();
+
+            // Display the content of the territory vector
+            for (const auto &cell : playerTerritory)
+            {
+                std::cout << "(" << cell.first << ", " << cell.second << ") ";
+            }
+
+            std::cout << std::endl;
 
             // Perform some game logic
             newBoard.displayBoard();
@@ -68,8 +93,13 @@ void Game::run() // Handle the game logic
 
             // Example of filling a cell with '#' at user-specified coordinates
             newBoard.fillCell(fillRow - 1, fillCol, newTilesManager);
+
+            // Add the filled cell to the player's territory
+            currentPlayer.addTerritory(fillRow - 1, fillCol, ARRAY_SIZE);
+
             newTilesManager.deleteLastTile();
         }
+        
     }
 }
 
@@ -186,4 +216,23 @@ void Game::shufflePlayerOrder()
 
     // Shuffle the playerOrder vector
     std::shuffle(playerOrder.begin(), playerOrder.end(), g);
+}
+
+void Game::displayTerritory() const
+{
+    for (const auto &player : players)
+    {
+        std::cout << player.getName() << "'s Territory Content:" << std::endl;
+
+        // Get the territory vector from the player
+        std::vector<std::pair<int, int>> playerTerritory = player.getTerritory();
+
+        // Display the content of the territory vector
+        for (const auto &cell : playerTerritory)
+        {
+            std::cout << "(" << cell.first << ", " << cell.second << ") ";
+        }
+
+        std::cout << std::endl;
+    }
 }
